@@ -1,0 +1,69 @@
+.premier_nave{
+	padding-left: 50px;
+	padding-bottom: 7px;
+	padding-top: 14px;
+	background-color: #2F2E33;
+	color: white;
+}
+.deuxieme_nave{
+	background-color: #D5D6D2;
+	padding-left: 50px;
+}
+.deuxieme_nave img{
+	
+	width: 50px;
+	height: 50px;
+}
+.mes_dive {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.mes_dive > div {
+  background-color: #f1f1f1;
+  margin: 10px;
+  padding: 20px;
+  font-size: 30px;
+  width: 40%;
+  border-radius: 15px;
+}
+#log {
+	border-radius: 15px 15px 0px 0px;
+	background-color: rgba(40,57,101,.9);
+	color: white ;
+	margin-bottom: 19.75px;
+	margin-left: -19.75px;
+	margin-right: -19.75px;
+	margin-top: -19.75px;
+	padding-bottom: 45px;
+	padding-top: 45px;
+}
+#log p > span {
+	font-size: 70px;
+	padding-bottom: 60px;
+	padding-right: 60px;
+	float:right;
+}
+#log p {
+	margin-left: 40px;
+}
+.mes_dive div form input {
+	margin-bottom: 10px;
+
+}
+.mes_dive div form p {
+	font-size: 20px;
+	
+}
+.hapen{
+	font-size:20px;
+}
+
+#button1{
+	background-color: rgba(40,57,101,.9);
+	width: 100%;
+}
+
+
+

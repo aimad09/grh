@@ -1,0 +1,47 @@
+
+	{% load static %}
+	{%load crispy_forms_tags%}
+	
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>boost</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/style.css' %}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<div class = "premier_nave">
+	<p>Gestion-Ressource-Humain-FSSM </p>
+</div>
+
+<div class = "deuxieme_nave">
+	<img src ="{% static 'accounts/pictures/logo.png' %}" >
+</div>
+
+
+<body  class="bg-dark">
+	<div class="mes_dive">
+		<div>
+			<div  id = "log">
+
+			<p>Connexion <span class="glyphicon glyphicon-lock"></span></p>
+			<p class= "hapen">Accéder à GRH-FSSM </p>
+			</div>
+			<form method = "POST" >
+                    {% csrf_token %}
+				<fieldset class="form-group">
+					<legend class= "border_bottom mb-4"></legend>
+					{{form|crispy}}
+					
+				</fieldset>
+		
+
+				<button type="submit" id="button1" class="btn btn-info"><span class="glyphicon glyphicon-lock"></span> Login</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
