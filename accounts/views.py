@@ -6,12 +6,13 @@ from .models import authentification
 from .models import Employe
 
 
+
 # Create your views here.
 
 def authenticate(username,password):
    for auth in authentification.objects.all():
             if username == auth.login and password == auth.password :
-               return auth.typecompte
+               return auth
    return None       
 
 def loginpage(request):
@@ -27,8 +28,8 @@ def loginpage(request):
          if auth != None :
                request.session['login'] = username
                request.session['password'] = pwd
-               request.session['compte'] = auth
-               link = 'accounts/'+auth+'.html'
+               request.session['compte'] = auth.typecompte
+               link = 'accounts/'+auth.typecompte+'.html'
                return render(request,link,locals())
          
   # else:
@@ -43,7 +44,7 @@ def profile(request):
 
 
 def register(request):
-   exist = False
+   message = {}
    typecompte=""
    if request.method =='POST':
       cin= request.POST.get('cin')
@@ -53,7 +54,6 @@ def register(request):
       pwd1 = request.POST.get('password1')  
       for emp in Employe.objects.all():
             if cin == emp.cin and  registNumber== emp.matricule :
-               exist = True
                if emp.Fonction_id == 1:
                   typecompte = "admin"
                elif emp.Fonction_id ==2 or emp.Fonction_id ==3 :
@@ -61,7 +61,24 @@ def register(request):
                else:
                    typecompte = "employe"
                if pwd == pwd1 :
-                  auth = authentification(login = username,password = pwd ,typecompte = typecompte )
-                  auth.save()
+                  if fetch_auth(emp.id) == None   :
+                    
+                     auth = authentification(login = username,password = pwd ,typecompte = typecompte,employe_id=emp.id )
+                     auth.save()
+                     message ="success"
+                    
+                  else:
+                      message =  "danger"
+               else:
+                    message =  "info"   
+            else :
+               message = "warning"
+              
    return render(request,'accounts/register.html',locals())
 
+
+def fetch_auth(id) :
+   for auth in authentification.objects.all():
+            if  auth.employe_id == id :
+            	return auth
+   return None       
