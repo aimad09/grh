@@ -146,3 +146,8 @@ def fetch_single(request):
       data = {}
       data['emp'] = model_to_dict(emp)
    return JsonResponse(data)
+
+
+
+
+

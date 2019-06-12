@@ -694,6 +694,7 @@
      $('#positionEdit').val(data.emp.Fonction),
      $('#serviceEdit').val(data.emp.Service),
      $('#departEdit').val(data.emp.Dept)
+     $('#emp_id').val(data.emp.id),
    }
   });
  });
@@ -707,25 +708,26 @@
         url:"{% url 'update' %}",
         dataType:  'json',
         data :{
-          matricule : $('#matricule').val(),
-          cin : $('#cin').val(),
-          firstname : $('#firstname').val(),
-          lastname : $('#lastname').val(),
-          adresse : $('#adresse').val(),
-          teleph :$('#teleph').val(),
-          email:$('#email').val(),
-          birthdate: $('#birthdate').val(),
-          startdate: $('#startdate').val(),
-          salaire: $('#salaire').val(),
-          position:$('#position').val(),
-          service:$('#service').val(),
-          depart:$('#depart').val(),
+          id:$('#emp_id').val(),
+          matricule : $('#matriculeEdit').val(),
+          cin : $('#cinEdit').val(),
+          firstname : $('#firstnameEdit').val(),
+          lastname : $('#lastnameEdit').val(),
+          adresse : $('#adresseEdit').val(),
+          teleph :$('#telephEdit').val(),
+          email:$('#emailEdit').val(),
+          birthdate: $('#birthdateEdit').val(),
+          startdate: $('#startdateEdit').val(),
+          salaire: $('#salaireEdit').val(),
+          position:$('#positionEdit').val(),
+          service:$('#serviceEdit').val(),
+          depart:$('#departEdit').val(),
 
           csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
           
         },
         success:function(data){
-          alert("object created");
+          alert("object updated");
         let row =  '';
         row = `
         <tr>
