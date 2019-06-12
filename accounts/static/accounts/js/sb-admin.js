@@ -38,3 +38,24 @@
   });
 
 })(jQuery); // End of use strict
+
+$(document).ready(function() {
+  $('#datatable').dataTable(
+    {
+      "processing": true,
+      "ajax": {
+          "processing": true,
+          "url": "{% url 'fetch' %}",
+          "dataSrc": ""
+      },
+  
+      "columns": [
+              { "data": "fields.someAttr" },
+              { "data": "pk" }
+          ]
+  } );
+  
+  
+   $("[data-toggle=tooltip]").tooltip();
+   
+} );

@@ -1,11 +1,12 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.shortcuts import render,redirect,render_to_response
+from django.http import HttpResponse,JsonResponse 
 from datetime import datetime
 from .form import LoginForm
 from .models import authentification
-from .models import Employe
-from dominate.tags import *
-
+from .models import Employe,Service,Fonction,Departement
+from django.core import serializers
+import json
+from django.forms.models import model_to_dict
 
 # Create your views here.
 
@@ -26,11 +27,8 @@ def loginpage(request):
          pwd = request.POST.get('password')
          auth = authenticate(username,pwd)
          if auth != None :
-               request.session['login'] = username
-               request.session['password'] = pwd
-               request.session['compte'] = auth.typecompte
-               link = 'accounts/'+auth.typecompte+'.html'
-               return render(request,link,locals())
+               request.session['auth'] = auth
+               return redirect(profile)
          
   # else:
      # form = LoginForm()
@@ -40,11 +38,18 @@ def loginpage(request):
 
 
 def profile(request):
-   return render(request,'accounts/admin.html')
+   
+   auth = request.session['auth'] 
+   employes = Employe.objects.all()
+   services = Service.objects.all()
+   depart = Departement.objects.all()
+   fonctions = Fonction.objects.all()
+   link = 'accounts/'+auth.typecompte+'.html'
+   return render(request,link,locals())
 
 
 def register(request):
-   message = {}
+   message = ""
    typecompte=""
    if request.method =='POST':
       cin= request.POST.get('cin')
@@ -82,3 +87,62 @@ def fetch_auth(id) :
             if  auth.employe_id == id :
             	return auth
    return None       
+
+
+def fetch(request):
+   if request.method == 'POST':
+      employes = Employe.objects.all()
+      services = Service.objects.all()
+      depart = Departement.objects.all()
+      fonctions = Fonction.objects.all()
+      data = {}
+       
+      
+      #employes =  serializers.serialize('json', employes)
+      '''
+      data["services"] =  serializers.serialize('json',services)
+      data["depart"] =  serializers.serialize('json',depart)
+      data["fonctions"] =  serializers.serialize('json', fonctions)
+      '''
+     
+   return employes
+
+def createEmployee(request):
+   if request.method == 'POST':
+      matricule = request.POST.get('matricule')
+      cin = request.POST.get('cin')
+      firstname = request.POST.get('firstname')
+      lastname = request.POST.get('lastname')
+      adresse = request.POST.get('adresse')
+      teleph = request.POST.get('teleph')
+      email = request.POST.get('email')
+      birthdate = request.POST.get('birthdate')
+      startdate = request.POST.get('startdate')
+      salaire = request.POST.get('salaire')
+      fonction =  request.POST.get('position')
+      service =  request.POST.get('service')
+      depart =  request.POST.get('depart')
+
+      emp = Employe(matricule = matricule,cin =cin,nom =lastname,prenom=firstname,adresse=adresse,
+      telephone=teleph,email=email,dateNaiss = birthdate,dateRecrut=startdate,salaireBase=int(salaire),
+      Service_id = int(service),Fonction_id=int(fonction),Dept_id=int(depart) )
+      emp.save()
+      data = {}
+      data['emp'] = model_to_dict(emp)
+     
+   return JsonResponse(data)
+
+
+
+
+
+
+
+def fetch_single(request):
+   if request.method == 'POST':
+      empid = request.POST.get('empid')
+      emp = Employe.objects.filter(id=empid).first()
+      print(emp.Fonction_id)
+      data = {}
+      data['emp'] = model_to_dict(emp)
+   return JsonResponse(data)

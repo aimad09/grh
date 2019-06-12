@@ -39,6 +39,7 @@ class Employe(models.Model):
     email = models.CharField(max_length=100,null=True)
     dateNaiss= models.DateField(null=True)
     dateRecrut= models.DateField(null=True)
+    salaireBase = models.IntegerField(null=True)
 
     #defintion des clés étrangères
     Statut = models.ForeignKey('Statut', on_delete=models.SET_NULL,null=True )
