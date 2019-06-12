@@ -141,7 +141,6 @@ def createEmployee(request):
 def fetch_single(request):
    if request.method == 'POST':
       empid = request.POST.get('empid')
-      print(empid)
       emp = Employe.objects.filter(id=empid).first()
       print(emp.Fonction_id)
       data = {}
