@@ -16,7 +16,7 @@
 
   <!-- Custom fonts for this template-->
   <link href="{% static 'accounts/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Page level plugin CSS-->
   <link href="{% static 'accounts/vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
 
@@ -78,8 +78,8 @@
           <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+          <a class="dropdown-item" href="#">{{auth.login}} ({{auth.typecompte}})</a>
           <a class="dropdown-item" href="#">Settings</a>
-          <a class="dropdown-item" href="#">Activity Log</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
         </div>
@@ -93,7 +93,7 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{% url 'profile'%}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
@@ -101,17 +101,12 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
+          <span>manage</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <h6 class="dropdown-header">Login Screens:</h6>
-          <a class="dropdown-item" href="login.html">Login</a>
-          <a class="dropdown-item" href="register.html">Register</a>
-          <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-          <div class="dropdown-divider"></div>
-          <h6 class="dropdown-header">Other Pages:</h6>
-          <a class="dropdown-item" href="404.html">404 Page</a>
-          <a class="dropdown-item" href="blank.html">Blank Page</a>
+          <h6 class="dropdown-header">manage</h6>
+          <a class="dropdown-item" href="login.html">services and departements</a>
+         
         </div>
       </li>
       <li class="nav-item">
@@ -206,25 +201,18 @@
           </div>
         </div>
 
-        <!-- Area Chart Example-->
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-            Area Chart Example</div>
-          <div class="card-body">
-            <canvas id="myAreaChart" width="100%" height="30"></canvas>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+      
 
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Data Table Example</div>
+            Employee Data Table </div>
           <div class="card-body">
+
             <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">create new</button>
+              <table   class="table table-bordered" id="dataTable"  class="striped highlight" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th>Name</th>
@@ -233,6 +221,8 @@
                     <th>Age</th>
                     <th>Start date</th>
                     <th>Salary</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -243,17 +233,23 @@
                     <th>Age</th>
                     <th>Start date</th>
                     <th>Salary</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
                 </tfoot>
-                <tbody>
+                <tbody  >
+                {% for emp in employes %}
                   <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                  </tr>
+                    <td>{{emp.matricule}}</td>
+                    <td>{{emp.cin}}</td>
+                    <td>{{emp.email}}</td>
+                    <td>{{emp.nom}}</td>
+                    <td>{{emp.prenom}}</td>
+                    <td>{{emp.cin}}</td>
+                    <td><p  data-placement="top" data-toggle="tooltip" class="update" id ="{{emp.id}}" title="Edit"><button     class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><i  class="fas fa-pen"></i></button></p></td>
+                    <td><p data-placement="top" data-toggle="tooltip" title="Delete"  class="delete" id ="{{emp.id}}"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><i class="fas fa-trash-alt"></i></button></p></td>
+						</tr>
+                  {% endfor %}
                  
                 </tbody>
               </table>
@@ -263,22 +259,181 @@
         </div>
 
       </div>
+
+      <!--modal hidden -->
+
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+          <div class="modal-header">
+          <h4 class="modal-title custom_align" id="Heading">Edit  Details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        
+      </div>
+          <div class="modal-body">
+          <div class="container">
+          <div class ="row">
+          <div class ="col">
+          <form method ='POST' id ="editemp">
+          {% csrf_token %}
+          <div class="form-group">
+          
+          <label> Registration code
+        <input class="form-control " id="matriculeEdit" name="matriculeEdit" type="text" placeholder="">
+        </label>
+        </div>
+        <div class="form-group">
+        <label> CIN
+        <input class="form-control " id="cinEdit" name="cinEdit" type="text" placeholder="">
+        <label>
+        </div>
+        <div class="form-group">
+        <label>First name
+         <input class="form-control " id="firstnameEdit" name="firstnameEdit" type="text" placeholder="">
+         </label>
+        </div>
+        <div class="form-group">
+        <label>Last name
+         <input class="form-control "  id="lastnameEdit" name="lastnameEdit" type="text" placeholder="">
+         </label>
+        </div>
+        <div class="form-group">
+        <label>Adresse
+         <input class="form-control " id="adresseEdit" name="adresseEdit"  type="text" placeholder="">
+         </label>
+        </div>
+        <div class="form-group">
+        <label>Telephone
+         <input class="form-control " type="tel"   id="telephEdit" name="telephEdit" placeholder="">
+         </label>
+        </div>
+        </div>
+        <div class="col">
+           <div class="form-group">
+           <label>Email
+        <input class="form-control " type="email"  id="emailEdit" name="emailEdit" placeholder="">
+        </label>
+        </div>
+        <div class="form-group">
+        <label>Birth date
+        <input class="form-control " type="date" id="birthdateEdit" name="birthdateEdit" placeholder="YYYY/MM/DD">
+        </label>
+        </div>
+        <div class="form-group">
+        <label> start date
+         <input class="form-control " type="date" id="startdateEdit" name="startdateEdit" placeholder="YYYY/MM/DD">
+         </label>
+        </div>
+
+        <div class="form-group">
+          <label> salaire
+              <input class="form-control " type="number" id="salaireEdit" name="salaireEdit"    placeholder="">
+          </label>
+        </div>
+
+        <div class="form-group">
+                <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="positionEdit">Position</label>
+          </div>
+          <select class="custom-select" id="positionEdit" name="positionEdit">
+            <option selected>Choose...</option>
+            {% for f in fonctions %}
+            <option value="{{f.id}}">{{f.nomFonction}}</option>
+            {% endfor %}
+          </select>
+      </div>
+
+
+        </div>
+        <div class="form-group">
+                  <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="serviceEdit">Service</label>
+            </div>
+            <select class="custom-select" id="serviceEdit" name="serviceEdit">
+              <option selected>Choose...</option>
+             {% for s in services %}
+                 <option value="{{s.id}}">{{s.nomService}}</option>
+              {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+                  <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="departEdit">Departements</label>
+            </div>
+            <select class="custom-select" id="departEdit" name="departEdit">
+              <option selected>Choose...</option>
+              {% for d in depart %}
+                 <option value="{{d.id}}">{{d.nomDepart}}</option>
+              {% endfor %}
+            </select>
+        </div>
+
+        </div>
+        </div>
+        </div>
+        </div> 
+      </div>
+          <div class="modal-footer ">
+          <input type="hidden" name="emp_id" id="emp_id"  />
+        <button type="submit" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
+      </div>
+      </form>
+        </div>
+    <!-- /.modal-content --> 
+  </div>
+      <!-- /.modal-dialog --> 
+    </div>
+    
+   
+    
+    
       <!-- /.container-fluid -->
 
       <!-- Sticky Footer -->
-      <footer class="sticky-footer">
+     
+
+    
+    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+ <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright © Your Website 2019</span>
           </div>
         </div>
-      </footer>
+  </footer>
 
-    </div>
-    <!-- /.content-wrapper -->
+    <!-- modal delete dialog-->
 
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+      <div class="modal-dialog">
+    <div class="modal-content">
+          <div class="modal-header">
+           <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+       
+      </div>
+          <div class="modal-body">
+       
+       <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?</div>
+       
+      </div>
+        <div class="modal-footer ">
+        <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
+      </div>
+        </div>
+    <!-- /.modal-content --> 
   </div>
-  <!-- /#wrapper -->
+      <!-- /.modal-dialog --> 
+    </div>
+
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
@@ -304,6 +459,142 @@
     </div>
   </div>
 
+
+
+<!--modal for adding new employee -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method = 'POST' id="newEmployee">
+              {% csrf_token %}
+          <div class="modal-body">
+          <div class="container">
+          <div class ="row">
+          <div class ="col">
+ 
+          <div class="form-group">
+          <label> Registration code
+        <input class="form-control " type="text" name="matricule" id="matricule" placeholder="Tiger Nixon">
+        </label>
+        </div>
+        <div class="form-group">
+        <label> CIN
+        <input class="form-control " type="text"  name="cin" id="cin" placeholder="System Architect">
+        <label>
+        </div>
+        <div class="form-group">
+        <label>First name
+         <input class="form-control " type="text" name="firstname" id="firstname" placeholder="Edinburgh">
+         </label>
+        </div>
+        <div class="form-group">
+        <label>Last name
+         <input class="form-control " type="text"  name="lastname" id="lastname" placeholder="Edinburgh">
+         </label>
+        </div>
+        <div class="form-group">
+        <label>Adresse
+         <input class="form-control " type="text" name="adresse" id="adresse" placeholder="Edinburgh">
+         </label>
+        </div>
+        <div class="form-group">
+        <label>Telephone
+         <input class="form-control " type="number" name="teleph" id="teleph" placeholder="Edinburgh">
+         </label>
+        </div>
+        </div>
+        <div class="col">
+           <div class="form-group">
+           <label>Email
+        <input class="form-control " type="email" name="email" id="email" placeholder="Tiger Nixon">
+        </label>
+        </div>
+        <div class="form-group">
+        <label>Birth date
+        <input class="form-control " type="date" name="birthdate" id="birthdate" placeholder="YYYY/MM/DD">
+        </label>
+        </div>
+        <div class="form-group">
+        <label> start date
+         <input class="form-control " type="date" name="startdate" id="startdate"   placeholder="">
+         </label>
+        </div>
+
+         <div class="form-group">
+        <label> salaire
+         <input class="form-control " type="number" name="salaire" id="salaire"   placeholder="">
+         </label>
+        </div>
+        
+
+        <div class="form-group">
+                <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="position">Position</label>
+          </div>
+          <select class="custom-select" id="position" name="position">
+            <option selected>Choose...</option>
+            {% for f in fonctions %}
+            <option value="{{f.id}}">{{f.nomFonction}}</option>
+            {% endfor %}
+          </select>
+          </div>
+      </div>
+
+
+        <!--</div>-->
+        <div class="form-group">
+                  <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="service">Service</label>
+            </div>
+            <select class="custom-select" id="service" name="service">
+              <option selected>Choose...</option>
+              {% for s in services %}
+                 <option value="{{s.id}}">{{s.nomService}}</option>
+              {% endfor %}
+            </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+                  <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="depart">Departements</label>
+            </div>
+            <select class="custom-select" id="depart" name="depart">
+              <option selected>Choose...</option>
+              {% for d in depart %}
+                 <option value="{{d.id}}">{{d.nomDepart}}</option>
+              {% endfor %}
+            </select>
+            </div>
+        </div>
+
+        </div>
+        </div>
+        </div>
+       <!-- </div>--> 
+      </div>
+          <div class="modal-footer ">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         
+        <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+        </div>
+    <!-- /.modal-content --> 
+  </div>
+      <!-- /.modal-dialog --> 
+    </div>
+    
+
   <!-- Bootstrap core JavaScript-->
   <script src="{% static 'accounts/vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'accounts/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -312,7 +603,7 @@
   <script src="{% static 'accounts/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
   <!-- Page level plugin JavaScript-->
-  <script src="{% static 'accounts/vendor/chart.js/Chart.min.js"></script>
+  
   <script src="{% static 'accounts/vendor/datatables/jquery.dataTables.js' %}"></script>
   <script src="{% static 'accounts/vendor/datatables/dataTables.bootstrap4.js' %}"></script>
 
@@ -322,6 +613,143 @@
   <!-- Demo scripts for this page-->
   <script src="{% static 'accounts/js/demo/datatables-demo.js' %}"></script>
   <script src="{% static 'accounts/js/demo/chart-area-demo.js' %}"></script>
+  <script type="text/javascript">
+        
+
+
+  
+  
+  
+
+
+  $(document).on('submit','#newEmployee',function(e){
+     e.preventDefault();
+
+     $.ajax({
+        type :'POST',
+        url:"{% url 'createEmployee' %}",
+        dataType:  'json',
+        data :{
+          matricule : $('#matricule').val(),
+          cin : $('#cin').val(),
+          firstname : $('#firstname').val(),
+          lastname : $('#lastname').val(),
+          adresse : $('#adresse').val(),
+          teleph :$('#teleph').val(),
+          email:$('#email').val(),
+          birthdate: $('#birthdate').val(),
+          startdate: $('#startdate').val(),
+          salaire: $('#salaire').val(),
+          position:$('#position').val(),
+          service:$('#service').val(),
+          depart:$('#depart').val(),
+
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+          
+        },
+        success:function(data){
+          alert("object created");
+        let row =  '';
+        row = `
+        <tr>
+            <td>${data.emp.matricule}</td>
+            <td>${data.emp.cin}</td>
+            <td>${data.emp.email}</td>
+            <td>${data.emp.nom}</td>
+            <td>${data.emp.prenom}</td>
+            <td>${data.emp.cin}</td>
+            
+            <td><p  data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><i  class="fas fa-pen"></i></button></p></td>
+            <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><i class="fas fa-trash-alt"></i></button></p></td>
+            
+        </tr>`;
+         $("tbody").append(row);
+        }                 
+     });          
+  });
+
+  $(document).on('click', '.update', function(){
+  var empid = $(this).attr("id");
+  $.ajax({
+   url:"{% url 'fetch_single' %}",
+   method:"POST",
+   dataType:"json",
+   data:{
+     empid:empid,
+     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+   },
+   
+   success:function(data) {
+     console.log(data);
+     $('#matriculeEdit').val(data.emp.matricule),
+     $('#cinEdit').val(data.emp.cin),
+     $('#firstnameEdit').val(data.emp.nom),
+     $('#lastnameEdit').val(data.emp.prenom),
+     $('#adresseEdit').val(data.emp.adresse),
+     $('#telephEdit').val(data.emp.telephone),
+     $('#emailEdit').val(data.emp.email),
+     $('#birthdateEdit').val(data.emp.dateNaiss),
+     $('#startdateEdit').val(data.emp.dateRecrut),
+     $('#salaireEdit').val(data.emp.salaireBase),
+     $('#positionEdit').val(data.emp.Fonction),
+     $('#serviceEdit').val(data.emp.Service),
+     $('#departEdit').val(data.emp.Dept)
+   }
+  });
+ });
+
+   
+  $(document).on('submit','#editemp',function(e){
+     e.preventDefault();
+
+     $.ajax({
+        type :'POST',
+        url:"{% url 'update' %}",
+        dataType:  'json',
+        data :{
+          matricule : $('#matricule').val(),
+          cin : $('#cin').val(),
+          firstname : $('#firstname').val(),
+          lastname : $('#lastname').val(),
+          adresse : $('#adresse').val(),
+          teleph :$('#teleph').val(),
+          email:$('#email').val(),
+          birthdate: $('#birthdate').val(),
+          startdate: $('#startdate').val(),
+          salaire: $('#salaire').val(),
+          position:$('#position').val(),
+          service:$('#service').val(),
+          depart:$('#depart').val(),
+
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+          
+        },
+        success:function(data){
+          alert("object created");
+        let row =  '';
+        row = `
+        <tr>
+            <td>${data.emp.matricule}</td>
+            <td>${data.emp.cin}</td>
+            <td>${data.emp.email}</td>
+            <td>${data.emp.nom}</td>
+            <td>${data.emp.prenom}</td>
+            <td>${data.emp.cin}</td>
+            
+            <td><p  data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><i  class="fas fa-pen"></i></button></p></td>
+            <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><i class="fas fa-trash-alt"></i></button></p></td>
+            
+        </tr>`;
+         $("tbody").append(row);
+        }                 
+     });          
+  });
+
+
+ 
+  
+  
+  </script>
 
 </body>
 
