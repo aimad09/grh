@@ -69,8 +69,17 @@
               </div>
             </div>
           </div>
+           {% if message == "success" %}
+            <div class ="alert alert-success" role="alert">you have been registered successfuly</div>  
+            {% elif message == "danger" %}
+            <div class ="alert alert-danger" role="alert">an account already exists with this CIN</div>  
+            {% elif message == "warning" %}
+              <div class ="alert alert-warning" role="alert">you're not in the employee database </div> 
+            {% elif message == "info"  %}
+            <div class ="alert alert-info" role="alert">passwords do not match </div> 
+            {%endif%}
          <!-- <a href="{% url 'login'%}" class="btn btn-primary btn-block" >Register</a>-->
-          <button type="submit" id="button1" class="btn btn-primary btn-block">Login</button>
+          <button type="submit" id="button1" class="btn btn-primary btn-block">Register</button>
         </form>
         <div class="text-center">
           <a class="d-block small mt-3" href="{% url 'login' %}">Login Page</a>

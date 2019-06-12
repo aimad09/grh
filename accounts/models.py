@@ -49,6 +49,7 @@ class Employe(models.Model):
 
 
 class demandeConge(models.Model):
+    datedebut = models.DateField(null=True)
     nbjourdemnade = models.IntegerField(null=True)
     employe = models.ForeignKey('Employe', on_delete=models.SET_NULL,null=True )
     typeconge = models.ForeignKey('Conge', on_delete=models.SET_NULL,null=True )
@@ -67,7 +68,8 @@ class authentification(models.Model):
     employe = models.ForeignKey('Employe', on_delete=models.SET_NULL,null=True )
 
 class demandeAbsence(models.Model):
-    nbheure = models.IntegerField(null=True)
+    nbheure = models.IntegerField(blank=True,null=True)
+    heurabsence = models.TimeField(null=True)
     period = models.CharField(max_length=100,null=True)
     employe = models.ForeignKey('Employe', on_delete=models.SET_NULL,null=True )
 

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'crispy_forms',
+    "bootstrap_datepicker_plus",
+    "bootstrap4",
 ]
 
 MIDDLEWARE = [
@@ -81,16 +83,34 @@ WSGI_APPLICATION = 'HRproject.wsgi.application'
 #    }
 #}
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'HRproject',
+#        'USER':'root',
+#        'PASSWORD':'',
+#        'PORT':''
+#   }
+#}
+
 DATABASES = {
     'default': {
+        # MySQL database engine class.
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'HRproject',
-        'USER':'root',
-        'PASSWORD':'',
-        'PORT':''
+        # MySQL database host ip.
+        'HOST': '127.0.0.1',
+        # port number.
+        'PORT': '3306',
+        # database name.
+        'NAME': 'grh_fssm',
+        # user name.
+        'USER': 'admin',
+        # password
+        'PASSWORD': '2222',
+        # connect options
+        'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",},
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -135,5 +155,12 @@ CRISPY_TEMPLATE_PACK= 'bootstrap4'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
+
+TIME_INPUT_FORMATS = ('%H:%M',)
 
 
